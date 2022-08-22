@@ -29,7 +29,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           RUSTTARGET: ${{ matrix.target }}
-          EXTRA_FILES: "README.md"
+          EXTRA_FILES: "README.md"          
+          SRC_DIR: "src"
           MINIFY: "yes"
   release_without_not_required:
     name: release ${{ matrix.target }}
