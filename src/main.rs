@@ -12,6 +12,7 @@ fn main() {
             "config" => auto_relocating::configure(),
             "run" => run(),
             "export" => auto_relocating::export(),
+            "import" => auto_relocating::import(&args),
             _ => println!("Error: Command not found.\nUse help command to see the command list."),
         };
     }

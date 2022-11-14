@@ -19,6 +19,15 @@ pub fn export() {
     print!("{}", result.trim());
 }
 
+pub fn import(args: &Vec<String>) {
+    if args.len() < 3 {
+        panic!("You didn't input anything to import");
+    }
+
+    let params = RelocateParams::get_from_args(args);
+    params.save_to_file();
+}
+
 pub fn get_path_items() -> Vec<String> {
     RelocateParams::get_from_file().path_items
 }
