@@ -9,3 +9,4 @@ SUBCOMMANDS:
     help            Show help
     config          Reopen configuration prompt
     run             Run que relocate
+    export          Show a command to import your configuration on another PC

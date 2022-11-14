@@ -13,6 +13,12 @@ pub fn configure() {
     RelocateParams::configure()
 }
 
+pub fn export() {
+    let result = "cargo import ".to_string() + RelocateParams::get_from_file().to_string().as_str();
+
+    print!("{}", result.trim());
+}
+
 pub fn get_path_items() -> Vec<String> {
     RelocateParams::get_from_file().path_items
 }
