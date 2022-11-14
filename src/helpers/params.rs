@@ -1,14 +1,13 @@
 use dirs_next;
 use std::{
+    fmt,
     fs::{self, File},
     io::{BufReader, Write},
     path::Path,
-    fmt
 };
 
-use serde;
-
 use super::dlg_helper;
+use serde;
 
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct RelocateParams {
@@ -27,15 +26,12 @@ impl Default for RelocateParams {
     }
 }
 
-
 impl fmt::Display for RelocateParams {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, 
-               "--path \"{}\" --from \"{}\" --to \"{}\"  --deep \"{}\"", 
-               self.folder_read, 
-               self.path_items[0], 
-               self.path_items[1],
-               self.deep_search
+        write!(
+            f,
+            "--path \"{}\" --from \"{}\" --to \"{}\" --deep \"{}\"",
+            self.folder_read, self.path_items[0], self.path_items[1], self.deep_search
         )
     }
 }
