@@ -14,10 +14,10 @@ pub fn configure() {
 }
 
 pub fn export() {
-    let result = "auto_relocating import ".to_string()
-        + RelocateParams::get_from_file().to_string().as_str();
+    let params = RelocateParams::get_from_file();
+    let params_str = params.to_string();
 
-    print!("{}", result.trim());
+    print!("{} {} {}", "auto_relocating", "import", params_str);
 }
 
 pub fn import(args: &Vec<String>) {
