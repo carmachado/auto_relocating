@@ -14,7 +14,8 @@ pub fn configure() {
 }
 
 pub fn export() {
-    let result = "cargo import ".to_string() + RelocateParams::get_from_file().to_string().as_str();
+    let result = "auto_relocating import ".to_string()
+        + RelocateParams::get_from_file().to_string().as_str();
 
     print!("{}", result.trim());
 }
