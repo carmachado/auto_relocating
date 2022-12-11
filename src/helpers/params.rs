@@ -6,7 +6,7 @@ use std::{
     path::Path,
 };
 
-use super::dlg_helper;
+use super::{dlg_helper, path_items::PathItems};
 use serde;
 
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -65,11 +65,14 @@ impl RelocateParams {
         file.write_all(json.as_bytes()).unwrap();
     }
 
-    pub fn get_from_args(args: &Vec<String>) -> RelocateParams {
+    pub fn get_from_args(args: &Vec<String>) -> (RelocateParams, PathItems) {
         let mut params = match RelocateParams::read_from_file() {
             Ok(params) => params,
             Err(_) => RelocateParams::default(),
         };
+
+        let before_path_items = params.path_items.clone();
+        let mut path_items = PathItems::default();
 
         let mut i = 2;
         while i + 1 < args.len() {
@@ -77,8 +80,14 @@ impl RelocateParams {
 
             match args[i].as_str() {
                 "--path" => params.folder_read = next_arg,
-                "--from" => params.path_items[0] = next_arg,
-                "--to" => params.path_items[1] = next_arg,
+                "--from" => {
+                    params.path_items[0] = next_arg.clone();
+                    path_items.from = next_arg;
+                }
+                "--to" => {
+                    params.path_items[1] = next_arg.clone();
+                    path_items.to = next_arg;
+                }
                 "--deep" => params.deep_search = next_arg.parse().unwrap(),
                 _ => panic!("Invalid param"),
             }
@@ -86,7 +95,11 @@ impl RelocateParams {
             i += 2;
         }
 
-        params
+        if params.path_items[0] == params.path_items[1] {
+            params.path_items = before_path_items;
+        }
+
+        (params, path_items)
     }
 
     pub fn get_from_file() -> RelocateParams {
