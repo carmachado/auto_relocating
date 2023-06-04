@@ -1,6 +1,8 @@
 use std::env;
 
-use auto_relocating::helpers::{dlg_helper, path_items::PathItems};
+use auto_relocating::{
+    adapters::dialoguer_adapter::DialoguerAdapter, controllers::path_items::PathItems,
+};
 
 static HELP_TEXT: &'static str = include_str!("./assets/help.md");
 
@@ -20,38 +22,41 @@ fn main() {
     }
 
     run(&args);
-    dlg_helper::select("Press enter to exit", &["Exit"]);
+    DialoguerAdapter::select("Press enter to exit", &["Exit"]);
 }
 
 fn run(args: &Vec<String>) {
-    let path_args = if args.len() >= 3 {
-        auto_relocating::import(&args)
-    } else {
-        PathItems::default()
+    let mut path_items = PathItems::default();
+
+    if has_params(args) {
+        path_items = auto_relocating::import(&args);
+    }
+
+    if path_items.is_empty() {
+        path_items = get_from_to_selectdlg()
     };
 
-    let path_items = if path_args.is_empty() {
-        get_from_to_selectdlg()
-    } else {
-        path_args
-    };
+    let path_items = normalize_with_file(path_items);
 
-    let path_items = get_stable_path_items(path_items);
-
-    auto_relocating::relocate_all_folders(path_items);
+    auto_relocating::relocate(path_items);
 }
 
-fn get_stable_path_items(path_items: PathItems) -> PathItems {
-    let path_file = auto_relocating::get_path_items();
-    let path_file = PathItems::new(&path_file[0], &path_file[1]);
+fn has_params(args: &Vec<String>) -> bool {
+    args.len() >= 3
+}
 
-    path_items.normalized(&path_file)
+fn normalize_with_file(path_items: PathItems) -> PathItems {
+    let path_items_file = auto_relocating::get_path_items_from_file();
+
+    path_items.normalized(&path_items_file)
 }
 
 fn get_from_to_selectdlg() -> PathItems {
-    let path_items = auto_relocating::get_path_items();
+    let path_items = auto_relocating::get_path_items_from_file();
+    let vec_path_items = vec![path_items.from, path_items.to];
 
-    let selection: usize = dlg_helper::select("Where do you want to relocate?", &path_items);
+    let selection: usize =
+        DialoguerAdapter::select("Where do you want to relocate?", &vec_path_items);
 
-    PathItems::new(&String::new(), &path_items[selection])
+    PathItems::new(&String::new(), &vec_path_items[selection])
 }
