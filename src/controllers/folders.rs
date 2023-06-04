@@ -50,7 +50,10 @@ mod tests {
         let mut params = RelocateParams::default();
         params.folder_read = "".to_string();
 
-        assert_eq!(super::get_directories_pattern(&params), "*\\.svn")
+        assert_eq!(
+            super::get_directories_pattern(&params),
+            format!("*{sep}.svn", sep = std::path::MAIN_SEPARATOR)
+        )
     }
 
     #[test]
@@ -58,7 +61,10 @@ mod tests {
         let mut params = RelocateParams::default();
         params.folder_read = "folder1".to_string();
 
-        assert_eq!(super::get_directories_pattern(&params), "folder1*\\.svn")
+        assert_eq!(
+            super::get_directories_pattern(&params),
+            format!("folder1*{sep}.svn", sep = std::path::MAIN_SEPARATOR)
+        )
     }
 
     #[test]
@@ -68,7 +74,10 @@ mod tests {
 
         assert_eq!(
             super::get_directories_pattern(&params),
-            "folder1*\\.svn;folder2*\\.svn"
+            format!(
+                "folder1*{sep}.svn;folder2*{sep}.svn",
+                sep = std::path::MAIN_SEPARATOR
+            )
         )
     }
 
@@ -78,6 +87,9 @@ mod tests {
         params.folder_read = "".to_string();
         params.deep_search = true;
 
-        assert_eq!(super::get_directories_pattern(&params), "**\\.svn")
+        assert_eq!(
+            super::get_directories_pattern(&params),
+            format!("**{sep}.svn", sep = std::path::MAIN_SEPARATOR)
+        )
     }
 }
