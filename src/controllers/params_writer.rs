@@ -8,7 +8,7 @@ pub fn configure() -> RelocateParams {
     let mut params = RelocateParams::default();
 
     params.folder_read = DialoguerAdapter::input(
-        "Enter the directory that you want to scan (The parent folder from child working copies)",
+        "Enter the directory that you want to scan (You can scan multiples using ; as separator)",
     );
 
     params.deep_search = DialoguerAdapter::confirm("You want to scan subdirectories?");

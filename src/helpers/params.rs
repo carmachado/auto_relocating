@@ -107,7 +107,7 @@ impl RelocateParams {
             RelocateParams::configure();
         }
 
-        RelocateParams::read_from_file().expect("Configration file not found")
+        RelocateParams::read_from_file().expect("Configuration file not found")
     }
 
     pub fn configure() {
