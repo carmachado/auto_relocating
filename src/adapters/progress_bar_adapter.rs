@@ -41,7 +41,7 @@ impl ProgressBarAdapter {
             "{} Directory {}: {}",
             style("[ERROR]").red().bold(),
             style(directory).bold(),
-            error
+            error.escape_default()
         ));
     }
 
