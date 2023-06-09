@@ -1,4 +1,4 @@
-use std::{fmt, fs};
+use std::fs;
 
 use super::path_items::PathItems;
 use serde;
@@ -17,16 +17,6 @@ impl Default for RelocateParams {
             folder_read: String::new(),
             deep_search: false,
         }
-    }
-}
-
-impl fmt::Display for RelocateParams {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "--path \"{}\" --from \"{}\" --to \"{}\" --deep \"{}\"",
-            self.folder_read, self.path_items[0], self.path_items[1], self.deep_search
-        )
     }
 }
 
