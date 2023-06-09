@@ -1,6 +1,8 @@
 pub mod adapters;
 pub mod controllers;
 
+use std::process::Command;
+
 use controllers::params_reader::arg_reader;
 use controllers::params_writer;
 use controllers::path_items::PathItems;
@@ -14,9 +16,21 @@ pub fn configure() {
 
 pub fn export() {
     let params = file_reader::get_from_file().expect("You don't have data to be exported");
-    let params_str = params.to_string();
 
-    print!("{} {} {}", "auto_relocating", "import", params_str);
+    let mut command = Command::new("auto_relocating");
+    command.args([
+        "import",
+        "--path",
+        params.folder_read.as_str(),
+        "--from",
+        params.path_items[0].as_str(),
+        "--to",
+        params.path_items[1].as_str(),
+        "--deep",
+        params.deep_search.to_string().as_str(),
+    ]);
+
+    print!("{:?}", command);
 }
 
 pub fn import(args: &Vec<String>) -> PathItems {
