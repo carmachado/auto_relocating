@@ -27,10 +27,14 @@ impl RelocateController {
     }
 
     pub fn run(&self) {
-        self.directories
+        let threads: Vec<JoinHandle<()>> = self
+            .directories
             .clone()
             .into_iter()
             .map(|directory| self.create_relocate_thread(&directory))
+            .collect();
+        threads
+            .into_iter()
             .for_each(|thread| thread.join().unwrap())
     }
 
