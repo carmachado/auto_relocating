@@ -54,7 +54,10 @@ impl RelocateController {
         if folders::is_directory(&directory) {
             let output = RelocateController::run_svn_relocate(&directory, &path_items);
 
-            let error = String::from_utf8_lossy(&output.stderr);
+            let error = match output {
+                Ok(out) => String::from_utf8_lossy(&out.stderr).to_string(),
+                Err(error) => error.to_string(),
+            };
 
             bar.finish(&directory, &error);
         } else {
@@ -62,13 +65,15 @@ impl RelocateController {
         }
     }
 
-    fn run_svn_relocate(directory: &String, path_items: &PathItems) -> Output {
+    fn run_svn_relocate(
+        directory: &String,
+        path_items: &PathItems,
+    ) -> Result<Output, std::io::Error> {
         Command::new("svn")
             .arg("relocate")
             .arg(&path_items.from)
             .arg(&path_items.to)
             .arg(&directory)
             .output()
-            .expect("Failed to execute process")
     }
 }
