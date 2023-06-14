@@ -50,5 +50,8 @@ pub fn relocate(path_items: PathItems) {
 }
 
 pub fn get_path_items_from_file() -> PathItems {
-    file_reader::get_from_file().unwrap().as_path_items()
+    match file_reader::get_from_file() {
+        Ok(file) => file.as_path_items(),
+        Err(_) => params_writer::configure().as_path_items(),
+    }
 }
